@@ -1,4 +1,7 @@
 @echo off
+echo creating virtual enviroment...
+python -m pip install virtualenv
+python -m virtualenv signC
 echo activating virtual enviroment...
 call ./signC/Scripts/activate
 echo activated virtual enviroment (signC)
