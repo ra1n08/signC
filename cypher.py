@@ -1,7 +1,6 @@
 import base64
 import os
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.padding import PKCS7
 import hashlib
@@ -12,14 +11,14 @@ from _math import modPrimePow, is_prime
 from tqdm import tqdm
 
 
-def createParameter():
+def createParameter(randbits):
     start_time = time.time()
     #  hàm kiếm tra số nguyên tố Miller-Rabin primality test.
 
     def generate_prime():
-        Q = random.getrandbits(160)
+        Q = random.getrandbits(randbits)
         while not is_prime(Q):
-            Q = random.getrandbits(160)
+            Q = random.getrandbits(randbits)
         return Q
 
 
@@ -400,4 +399,6 @@ def un_signC(path_in, path_out):
 # if __name__ == "__main__":
 #     signC("#")
 #     un_signC("#")
+
+createParameter(160)
     
