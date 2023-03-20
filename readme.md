@@ -1,6 +1,6 @@
-### signCryption with GUI (Flask)
+### signCryption with GUI (PyQt5)
 - [x] algorithm, sign and unsign
-- [ ] make simple GUI (with thread), call function, etc...
+- [x] make simple GUI (with thread), call function, etc...
 - [ ] design the best GUI
 - [ ] tesing...
 ### TEST TASKs
@@ -8,3 +8,4 @@
 - [ ] sign (with path)
 - [ ] un-sign (with path)
 - [ ] debug window work?
+- [ ] check 3 times?
