@@ -1,5 +1,6 @@
 import random
 
+#  hàm kiếm tra số nguyên tố Miller-Rabin primality test.
 def modPrimePow(a=int, b=int, p=int):
     ret = 1
     a %= p
