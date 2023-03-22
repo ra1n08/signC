@@ -9,7 +9,6 @@ import hashlib
 import time
 
 start_time = time.time()
-_mat
 def hash_to_128(value):
     sha256 = hashlib.sha256(value.encode())
     hex_dig = sha256.hexdigest()

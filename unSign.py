@@ -21,15 +21,15 @@ def calculate_hash(k, c, p):
     return k11, k21
 
 # Read values from files
-with open(r'C:\Users\ASUS\Desktop\thamso\a.txt', 'r') as f:
+with open(r'./thamso/a.txt', 'r') as f:
     a = int(f.read().strip())
-with open(r'C:\Users\ASUS\Desktop\thamso\ya.txt', 'r') as f:
+with open(r'./thamso/ya.txt', 'r') as f:
     ya = int(f.read().strip())
-with open(r'C:\Users\ASUS\Desktop\thamso\p.txt', 'r') as f:
+with open(r'./thamso/p.txt', 'r') as f:
     p = int(f.read().strip())
-with open(r'C:\Users\ASUS\Desktop\thamso\xb.txt', 'r') as f:
+with open(r'./thamso/xb.txt', 'r') as f:
     xb = int(f.read().strip())
-with open(r'C:\Users\ASUS\Desktop\c.r.s\s.txt', 'r') as f:
+with open(r'./c.r.s/s.txt', 'r') as f:
     s = int(f.read().strip())
 
 def fast_exponentiation(a, s, xb, p):
@@ -56,10 +56,10 @@ c = modPrimePow(ya, xb, p)
 k = fast_exponentiation(a, s, xb, p)
 # Calculate encryption keys
 k11, k21 = calculate_hash(k, c, p)
-with open(r"C:\Users\ASUS\Desktop\thamso\k11.txt", "w") as f:
+with open(r"./thamso/k11.txt", "w") as f:
     f.write(k11)
 
-with open(r"C:\Users\ASUS\Desktop\thamso\k21.txt", "w") as f:
+with open(r"./thamso/k21.txt", "w") as f:
     f.write(k21)
 print ('Tạo khóa k11 k21 thành công')
 
@@ -74,17 +74,17 @@ def decrypt_text_and_write_to_file(ciphertext, key, iv, output_file):
     with open(output_file, "wb") as f:
         f.write(plaintext)
         
-with open("C:\\Users\\ASUS\\Desktop\\thamso\\k11.txt", "rb") as f:
+with open(".\\thamso\\k11.txt", "rb") as f:
     key = f.read()
     
-with open(r"C:\Users\ASUS\Desktop\thamso\IV.txt", "rb") as f:
+with open(r"./thamso/IV.txt", "rb") as f:
     iv = f.read()
    
-with open("C:\\Users\\ASUS\\Desktop\\c.r.s\\c.txt", "r") as f:
+with open(".\\c.r.s\\c.txt", "r") as f:
     ciphertext = f.read()
     ciphertext = base64.b64decode(ciphertext)
 
-decrypt_text_and_write_to_file(ciphertext, key, iv, "C:\\Users\\ASUS\\Desktop\\filegiai\\giaima.txt")
+decrypt_text_and_write_to_file(ciphertext, key, iv, ".\\filegiai\\giaima.txt")
 
 print("Decryption succeeds")
 
@@ -93,24 +93,24 @@ def hash_function(key, plaintext):
     sha256.update(key + plaintext.encode('utf-8'))
     return sha256.hexdigest()
 
-with open("C:\\Users\\ASUS\\Desktop\\thamso\\k21.txt", "r", encoding="utf-8") as file:
+with open(".\\thamso\\k21.txt", "r", encoding="utf-8") as file:
     value = file.read().strip()
     k21 = bytes.fromhex(value)
 
-with open("C:\\Users\\ASUS\\Desktop\\filegiai\\giaima.txt", "r", encoding="utf-8") as file:
+with open(".\\filegiai\\giaima.txt", "r", encoding="utf-8") as file:
     plaintext = file.read().strip()
 
 r1 = hash_function(k21, plaintext)
 
-with open("C:\\Users\\ASUS\\Desktop\\c.r.s\\r1.txt", "w", encoding="utf-8") as file:
+with open(".\\c.r.s\\r1.txt", "w", encoding="utf-8") as file:
     file.write(r1)
 
 print('Tính chữ ký r1 thành công')
 
-with open('C:\\Users\\ASUS\\Desktop\\c.r.s\\r.txt', 'r') as file:
+with open('.\\c.r.s\\r.txt', 'r') as file:
     r = file.readline().strip()
 
-with open('C:\\Users\\ASUS\\Desktop\\c.r.s\\r1.txt', 'r') as file:
+with open('.\\c.r.s\\r1.txt', 'r') as file:
     r1 = file.readline().strip()
 
 if r1 == r:
