@@ -10,9 +10,9 @@ start_time = time.time()
 #  hàm kiếm tra số nguyên tố Miller-Rabin primality test.
 
 def generate_prime():
-    Q = random.getrandbits(140)
+    Q = random.getrandbits(160)
     while not is_prime(Q):
-        Q = random.getrandbits(140)
+        Q = random.getrandbits(160)
     return Q
 
 # tạo Q

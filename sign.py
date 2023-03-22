@@ -21,9 +21,9 @@ def calculate_hash(x, yb, p):
     k1, k2 = hash_to_128(str(value))
     return k1, k2
 
-x_file = r".\thamso\giatrix.txt"
-yb_file = r".\thamso\yb.txt"
-p_file = r".\thamso\P.txt"
+x_file = r"./thamso/giatrix.txt"
+yb_file = r"./thamso/yb.txt"
+p_file = r"./thamso/P.txt"
 
 with open(x_file, "r") as f:
     x = int(f.read().strip())
@@ -36,10 +36,10 @@ with open(p_file, "r") as f:
 
 k1, k2 = calculate_hash(x, yb, p)
 
-with open(r".\thamso\k1.txt", "w") as f:
+with open(r"./thamso/k1.txt", "w") as f:
     f.write(k1)
 
-with open(r".\thamso\k2.txt", "w") as f:
+with open(r"./thamso/k2.txt", "w") as f:
     f.write(k2)
 
 print ('Tạo khóa k1 k2 thành công')
@@ -53,20 +53,20 @@ def encrypt_text(plaintext, key, iv):
     ciphertext = encryptor.update(padded_data) + encryptor.finalize()
     return base64.b64encode(ciphertext)
 
-with open(".\\thamso\\k1.txt", "rb") as f:
+with open(".//thamso//k1.txt", "rb") as f:
     key = f.read()
  
-with open(r".\thamso\IV.txt", "rb") as f:
+with open(r"./thamso/IV.txt", "rb") as f:
     iv = f.read()
 
-plaintext_file = ".\\filecanmahoa\\filecanmahoa.txt"
+plaintext_file = ".//input//input.txt"
 
 with open(plaintext_file, "r", encoding='UTF-8') as f:
     plaintext = f.read()
 
 ciphertext = encrypt_text(plaintext, key, iv)
 
-encrypted_file = ".\\c.r.s\\c.txt"
+encrypted_file = ".//c.r.s//c.txt"
 with open(encrypted_file, "wb") as f:
     f.write(ciphertext)
 
@@ -77,31 +77,31 @@ def hash_function(key, plaintext):
     sha256.update(key + plaintext.encode('utf-8'))
     return sha256.hexdigest()
 
-with open(".\\thamso\\k2.txt", "r", encoding="utf-8") as file:
+with open(".//thamso//k2.txt", "r", encoding="utf-8") as file:
     value = file.read().strip()
     k2 = bytes.fromhex(value)
 
-with open(".\\filecanmahoa\\filecanmahoa.txt", "r", encoding="utf-8") as file:
+with open(".//input//input.txt", "r", encoding="utf-8") as file:
     plaintext = file.read().strip()
 
 r = hash_function(k2, plaintext)
 
-with open(".\\c.r.s\\r.txt", "w", encoding="utf-8") as file:
+with open(".//c.r.s//r.txt", "w", encoding="utf-8") as file:
     file.write(r)
 
 print('Tính chữ ký r thành công')
 
-P = r".\thamso\P.txt"
+P = r"./thamso/P.txt"
 with open(P, "r") as f:
      P = int(f.read().strip())  
-     x_file = r".\thamso\giatrix.txt"
+     x_file = r"./thamso/giatrix.txt"
 with open(x_file, "r") as f:
      x = int(f.read().strip())
-     x_a = r".\thamso\xa.txt"
+     x_a = r"./thamso/xa.txt"
 with open(x_a, "r") as f:
      x_a = int(f.read().strip())
      s = (x - x_a + P ) % P
-with open(".\\c.r.s\\s.txt", "w") as file:
+with open(".//c.r.s//s.txt", "w") as file:
          file.write(str(s))
 
 print('Tính s thành công')
