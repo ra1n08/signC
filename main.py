@@ -40,7 +40,7 @@ class Worker(QThread):
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-        
+        pbar = QProgressBar()
         
         layout = QVBoxLayout()
         layout.addWidget(self.label1)
