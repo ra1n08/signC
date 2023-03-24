@@ -41,9 +41,6 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         
-        self.label1 = QLabel('Ready for create parameters...')
-        self.label2 = QLabel('Not Ready for sign!')
-        self.label3 = QLabel('Not Ready for un-sign!')
         
         layout = QVBoxLayout()
         layout.addWidget(self.label1)
@@ -78,29 +75,23 @@ class MainWindow(QWidget):
         
     def start_task1(self):
         self.button1.setEnabled(False)
-        self.label1.setText('Creating...')
         self.worker1.start()
         
     def on_worker1_finished(self, result):
-        self.label1.setText(result)
         self.button1.setEnabled(True)
         
     def start_task2(self):
         self.button2.setEnabled(False)
-        self.label2.setText('Signing...')
         self.worker2.start()
         
     def on_worker2_finished(self, result):
-        self.label2.setText(result)
         self.button2.setEnabled(True)
         
     def start_task3(self):
         self.button3.setEnabled(False)
-        self.label3.setText('un-Signing...')
         self.worker3.start()
         
     def on_worker3_finished(self, result):
-        self.label3.setText(result)
         self.button3.setEnabled(True)
         
 if __name__ == '__main__':
