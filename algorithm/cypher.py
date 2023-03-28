@@ -8,18 +8,19 @@ import hashlib
 import time
 import random
 import secrets
-from _math import modPrimePow, is_prime
+from algorithm._math import modPrimePow, is_prime
 from tqdm import tqdm
 
 
-def createParameter():
+def createParameter(bit):
     start_time = time.time()
     #  hàm kiếm tra số nguyên tố Miller-Rabin primality test.
+    print("[create parameters!]")
 
     def generate_prime():
-        Q = random.getrandbits(160)
+        Q = random.getrandbits(bit)
         while not is_prime(Q):
-            Q = random.getrandbits(160)
+            Q = random.getrandbits(bit)
         return Q
 
 
@@ -44,17 +45,18 @@ def createParameter():
 
     print("Q =", Q)
     print("R =", R)
-    with open(".\\parameters\\P.txt", "w") as f:  # mở p.txt và ghi chuỗi p vào tệp
+    P_path = f"./parameters/P.txt"
+    with open(P_path, "w") as f:  # mở p.txt và ghi chuỗi p vào tệp
         f.write(str(P))
 
-    with open(".\\parameters\\P.txt", "r") as file:
+    with open(P_path, "r") as file:
         p = int(file.read().strip())  # lấy giá trị P để tính g
 
 # Define the values of Q
     Q = generate_prime()
 
 # Define the file path to write the matching pairs
-    file_path = r".\parameters\PR.txt"
+    file_path = f"./parameters/PR.txt"
 
 # Open the file in write mode
     with open(file_path, "w") as f:
@@ -70,8 +72,8 @@ def createParameter():
                 pbar.update(1)
     print('tao pr thành công')
 
-    input_file_path = r".\parameters\PR.txt"
-    output_file_path = r".\parameters\tapG.txt"
+    input_file_path = f"./parameters/PR.txt"
+    output_file_path = f"./parameters/tapG.txt"
 
 # Read the pairs (P, R) from the input file
     with open(input_file_path, "r") as f:

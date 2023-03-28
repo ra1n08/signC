@@ -1,4 +1,4 @@
-from cypher import createParameter, signC, un_signC
+from algorithm.cypher import createParameter, signC, un_signC
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -19,17 +19,6 @@ import sys
 import functools
 from colorama import Fore, Back, Style
 # import asyncio
-
-class Worker(QThread):
-    finished = pyqtSignal(str)
-    
-    def __init__(self, function):
-        super().__init__()
-        self.function = function
-    
-    def run(self):
-        result = self.function()
-        self.finished.emit(result)
         
 # def dialog():
 #     file, check = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()",
@@ -37,14 +26,7 @@ class Worker(QThread):
 #     if check:
 #         print(Fore.BLUE + "file input path > " + file)
 
-class dialog(QFileDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        
-        file, check = QFileDialog.getOpenFileName(None, "Open File to SignC", "", "Text Files (*.txt)")
-        
-        if check:
-            print(file)
+
 
 
 class MainWindow(QWidget):
