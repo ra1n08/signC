@@ -9,10 +9,10 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QLabel,
     QFrame,
+    QWidget,
     QFileDialog,
     QVBoxLayout,
     QProgressBar,
-    QWidget,
     QStatusBar
 )
 import sys
@@ -49,10 +49,10 @@ class dialog(QFileDialog):
 
 class MainWindow(QWidget):
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super(MainWindow, self).__init__(parent)
+        
        
-        
-        
+        self.statusBar = QStatusBar()
         self.pbar = QProgressBar()   # progress bar
         layout = QVBoxLayout()
         self.create_btn = QPushButton("Create Parameter")
@@ -60,18 +60,18 @@ class MainWindow(QWidget):
         self.unsign_btn = QPushButton("un-Sign")
         
         # init worker for multi-processing
-        self.wCP = Worker(lambda: createParameter(160))
-        self.wCP.finished.connect() # when wCP finished work, this will call a function
-        self.wSign = Worker(lambda: signC())
-        self.wSign.finished.connect() # when wSign finished work, this will call a function 
-        self.wUnSign = Worker(lambda: un_signC())
-        self.wUnSign.finished.connect() # when wUnSign finished work, this will call a function
+        # self.wCP = Worker(lambda: createParameter(160))
+        # self.wCP.finished.connect() # when wCP finished work, this will call a function
+        # self.wSign = Worker(lambda: signC())
+        # self.wSign.finished.connect() # when wSign finished work, this will call a function 
+        # self.wUnSign = Worker(lambda: un_signC())
+        # self.wUnSign.finished.connect() # when wUnSign finished work, this will call a function
         
-        self.create_btn.clicked.connect()
                 
         self.setFixedSize(400, 500)
         self.setLayout(layout)
-        self.setWindowTitle("signC")
+        self.setWindowTitle("Chương trình mô phỏng lược đồ kí mã dựa trên Elgamal và Schnorr")
+        # self.setStatusBar(self.statusBar)
         # self.setLayoutDirection(layout)
               
         layout.addWidget(self.create_btn)
@@ -79,10 +79,12 @@ class MainWindow(QWidget):
         layout.addWidget(self.unsign_btn)
         layout.addWidget(self.pbar)
         
-    def create_P(self):
-        # sth here
-        self.create_btn.setDisabled(True)
-        self.wCP.start()
+        # self.create_btn.clicked.connect(self.statusBar.showMessage("hello world!", 3000))
+        
+    # def create_P(self):
+    #     # sth here
+    #     self.create_btn.setDisabled(True)
+    #     self.wCP.start()
         
         
         
