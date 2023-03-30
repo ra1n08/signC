@@ -7,7 +7,7 @@ import ast
 from _math import modPrimePow
 import base64
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.ciphers import Ciphers, algorithms, modes
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.padding import PKCS7
 import hashlib
 
@@ -156,6 +156,7 @@ class Sign():
         self.x = None
         self.yb = None
         self.p = None
+        # self.inp = ""
     
     def hash_to_128(self, value):
         sha256 = hashlib.sha256(value.encode())
@@ -164,11 +165,11 @@ class Sign():
         k2 = hex_dig[32:]
         return k1, k2
     def calculate_hash(self, x, yb, p):
-        value = modest_hash(yb, x, p)
+        value = modPrimePow(yb, x, p)
         k1, k2 = self.hash_to_128(str(value))
         return k1, k2
     
-    def encrypt_text(self, plantext, key, iv):
+    def encrypt_text(self, plaintext, key, iv):
         backend = default_backend()
         padder = PKCS7(algorithms.AES.block_size).padder()
         padded_data = padder.update(plaintext.encode()) + padder.finalize()
@@ -188,11 +189,11 @@ class Sign():
         p_file = f"./thamso/P.txt"
         
         with open (x_file, "r") as f:
-            self.x = int (f.read().strip())
+            self.x = int(f.read().strip())
         with open (yb_file, "r") as f:
-            self.yb = int (f.read().strip())
+            self.yb = int(f.read().strip())
         with open (p_file, "r") as f:
-            self.p = int (f.read().strip())
+            self.p = int(f.read().strip())
         
         k1 , k2 = self.calculate_hash(self.x, self.yb, self.p)
         
@@ -203,7 +204,7 @@ class Sign():
             
         # print("Tạo khóa k1, k2 thành công!")
         
-    def ecrypt(self, inp, outp):
+    def encrypt(self, inp):
         with open(f"./thamso/k1.txt", "rb") as f:
             key = f.read()
         with open(f"./thamso/IV.txt", "rb") as f:
@@ -214,14 +215,27 @@ class Sign():
             
         cipher_text = self.encrypt_text(plantext, key, iv)
         
-        with open(outp, "wb") as f:
+        with open(f"./c.r.s/c.txt", "wb") as f:
             f.write(cipher_text)
         
         # print("Mã hóa thành công!")
         
-    def calculate_signature_r(self, )
+    def calculate_signature_r(self, input_file):
+        with open(f"./thamso/k2.txt", "r", encoding="utf-8") as f:
+            value = f.read().strip()
+            k2 = bytes.fromhex(value)
+            
+        with open(input_file, "r", encoding="utf-8") as f:
+            plantext = f.read().strip()
+            
+        r = self.hash_function(k2, plantext)
         
-    def calculate_s(self, outp):
+        with open(f"./c.r.s/r.txt", "r", encoding="utf-8") as f:
+            f.write(r)
+        
+        # print("Tính chữ kí r thành công!")
+        
+    def calculate_s(self):
         with open(f"./thamso/P.txt", "r") as f:
             P = int(f.read().strip())
         with open(f"./thamso/giatrix.txt", "r") as f:
@@ -229,8 +243,10 @@ class Sign():
         with open("./thamso/xa.txt", "r") as f:
             x_a = int(f.read().strip())
             s = (x - x_a + P) % P
-        with open(f".{outp}/s.txt") as f:
+        with open(f".thamso/s.txt") as f:
             f.write(str(s))
+            
+    
             
     
     
