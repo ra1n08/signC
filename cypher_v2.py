@@ -142,6 +142,25 @@ class Parameter():
         iv = secrets.token_bytes(16)
         with open(f"./thamso/IV.txt", "wb") as f:
             f.write(iv)
+
+class Sign():
+  def __init__(self) -> None:
+    pass
+
+  def run(self, inp, outp):
+    print(str(inp))
+    print(str(outp))
+
+
+class unSign():
+  def __init__(self) -> None:
+    pass
+
+  def run(self, inp, outp):
+    print(str(inp))
+    print(str(outp))
+    
+    
               
                 
 # if __name__ == "__main__":

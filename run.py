@@ -1,27 +1,32 @@
-from cypher_v2 import Parameter
+from cypher_v2 import Parameter, Sign, unSign
 import tqdm
 import time
 import sys
 
 class main():
     def __init__(self) -> None:
-        self.per = Parameter(bit=160)
+        self.param = Parameter(bit=160)
+        self.sign = Sign()
+        self.unSign = unSign()
     
     def run(self):
         # self.per.bit(160)
-        self.per.write_P()
-        self.per.read_P()
-        print("P = ", self.per.P)
-        print("Q = ", self.per.Q)
-        print("R = ", self.per.R)
-        for percent in self.per.generate_matching_pair():
+        self.param.write_P()
+        self.param.read_P()
+        print("P = ", self.param.P)
+        print("Q = ", self.param.Q)
+        print("R = ", self.param.R)
+        for percent in self.param.generate_matching_pair():
             print(f"Progress: {percent:.2f}%", end="\r")
         print("tạo PR thành công")
-        self.per.select_g()
-        self.per.select_a()
-        self.per.sender_XA()
-        self.per.sender_XB()
-        self.per.random_chain()
+        self.param.select_g()
+        self.param.select_a()
+        self.param.sender_XA()
+        self.param.sender_XB()
+        self.param.random_chain()
+
+        self.Sign.run()
+        self.unSign.run()
             
 if __name__ == "__main__":
     app = main()
