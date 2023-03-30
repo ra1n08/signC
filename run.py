@@ -25,8 +25,8 @@ class main():
         self.param.sender_XB()
         self.param.random_chain()
 
-        self.Sign.run()
-        self.unSign.run()
+        self.sign.run("#", "#")
+        self.unSign.run("#", "#")
             
 if __name__ == "__main__":
     app = main()

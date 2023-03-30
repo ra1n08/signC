@@ -1,7 +1,15 @@
+# for parameters creator
 import random
 from _math import is_prime
 import secrets
 import ast
+# fpr signcrypt
+from _math import modPrimePow
+import base64
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import Ciphers, algorithms, modes
+from cryptography.hazmat.primitives.padding import PKCS7
+import hashlib
 
 class Parameter():
     def __init__(self, bit) -> None:
@@ -144,22 +152,97 @@ class Parameter():
             f.write(iv)
 
 class Sign():
-  def __init__(self) -> None:
-    pass
+    def __init__(self) -> None:
+        self.x = None
+        self.yb = None
+        self.p = None
+    
+    def hash_to_128(self, value):
+        sha256 = hashlib.sha256(value.encode())
+        hex_dig = sha256.hexdigest()
+        k1 = hex_dig[:32]
+        k2 = hex_dig[32:]
+        return k1, k2
+    def calculate_hash(self, x, yb, p):
+        value = modest_hash(yb, x, p)
+        k1, k2 = self.hash_to_128(str(value))
+        return k1, k2
+    
+    def encrypt_text(self, plantext, key, iv):
+        backend = default_backend()
+        padder = PKCS7(algorithms.AES.block_size).padder()
+        padded_data = padder.update(plaintext.encode()) + padder.finalize()
+        cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=backend)
+        encryptor = cipher.encryptor()
+        ciphertext = encryptor.update(padded_data) + encryptor.finalize()
+        return base64.b64encode(ciphertext)     
+    
+    def hash_function(key, plantext):
+        sha256 = hashlib.sha256()
+        sha256.update(key + plantext.encode('utf-8'))   
+        return sha256.hexdigest()
 
-  def run(self, inp, outp):
-    print(str(inp))
-    print(str(outp))
-
+    def create_keys(self):
+        x_file = f"./thamso/giatrix.txt"
+        yb_file = f"./thamso/yb.txt"
+        p_file = f"./thamso/P.txt"
+        
+        with open (x_file, "r") as f:
+            self.x = int (f.read().strip())
+        with open (yb_file, "r") as f:
+            self.yb = int (f.read().strip())
+        with open (p_file, "r") as f:
+            self.p = int (f.read().strip())
+        
+        k1 , k2 = self.calculate_hash(self.x, self.yb, self.p)
+        
+        with open(f"./thamso/k1.txt", "w") as f:
+            f.write(k1)
+        with open(f"./thamso/k2.txt", "w") as f:
+            f.write(k2)
+            
+        # print("Tạo khóa k1, k2 thành công!")
+        
+    def ecrypt(self, inp, outp):
+        with open(f"./thamso/k1.txt", "rb") as f:
+            key = f.read()
+        with open(f"./thamso/IV.txt", "rb") as f:
+            iv = f.read()
+        
+        with open(inp, "r", encoding="UTF-8") as f:
+            plantext = f.read()
+            
+        cipher_text = self.encrypt_text(plantext, key, iv)
+        
+        with open(outp, "wb") as f:
+            f.write(cipher_text)
+        
+        # print("Mã hóa thành công!")
+        
+    def calculate_signature_r(self, )
+        
+    def calculate_s(self, outp):
+        with open(f"./thamso/P.txt", "r") as f:
+            P = int(f.read().strip())
+        with open(f"./thamso/giatrix.txt", "r") as f:
+            x = int(f.read().strip())
+        with open("./thamso/xa.txt", "r") as f:
+            x_a = int(f.read().strip())
+            s = (x - x_a + P) % P
+        with open(f".{outp}/s.txt") as f:
+            f.write(str(s))
+            
+    
+    
+        
+        
+            
+        
 
 class unSign():
-  def __init__(self) -> None:
-    pass
+    def __init__(self) -> None:
+        pass
 
-  def run(self, inp, outp):
-    print(str(inp))
-    print(str(outp))
-    
     
               
                 
