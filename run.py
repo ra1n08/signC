@@ -17,8 +17,8 @@ class main():
         print("Q = ", self.param.Q)
         print("R = ", self.param.R)
         for percent in self.param.generate_matching_pair():
-            print(f"Progress: {percent:.2f}%", end="\r")
-        print("tạo PR thành công")
+            print(f"Đang tạo (P, R) {percent:.2f}%", end="\r")
+        print("Tạo (P,R) thành công")
         self.param.select_g()
         self.param.select_a()
         self.param.sender_XA()
@@ -42,4 +42,4 @@ if __name__ == "__main__":
     runtime = time.time()
     app.run_param()
     app.run_sign(f"./input/input.txt")
-    print("Time elapsed: {:.2f} seconds".format(time.time() - runtime)) 
+    print("Thời gian thực hiện: {:.2f} seconds".format(time.time() - runtime)) 
