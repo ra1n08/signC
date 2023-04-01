@@ -3,12 +3,13 @@ import tqdm
 import time
 import sys
 
-class main():
+
+class main:
     def __init__(self) -> None:
         self.param = Parameter(bit=160)
         self.sign = Sign()
         self.unSign = unSign()
-    
+
     def run_param(self):
         # self.per.bit(160)
         self.param.write_P()
@@ -25,7 +26,7 @@ class main():
         self.param.sender_XB()
         self.param.random_chain()
         print("Tạp tham số thành công, yey :33")
-        
+
     def run_sign(self, inp):
         self.sign.create_keys()
         print("Tạo khóa k1, k2 thành công!")
@@ -36,10 +37,10 @@ class main():
         self.sign.calculate_s()
         print("Tính s thành công!")
 
-            
+
 if __name__ == "__main__":
     app = main()
     runtime = time.time()
     app.run_param()
     app.run_sign(f"./input/input.txt")
-    print("Thời gian thực hiện: {:.2f} seconds".format(time.time() - runtime)) 
+    print("Thời gian thực hiện: {:.2f} seconds".format(time.time() - runtime))
