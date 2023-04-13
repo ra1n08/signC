@@ -39,6 +39,15 @@ def is_prime(n, k=10):
         
         return True
     
+def fast_exponentiation(a, s, xb, p):
+    # Calculate t = a^s mod p
+    t = pow(a, s, p)
+
+    # Calculate k = t^xb mod p
+    k = pow(t, xb, p)
+
+    return k
+    
 # class type
 
 # class math():

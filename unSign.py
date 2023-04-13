@@ -21,15 +21,15 @@ def calculate_hash(k, c, p):
     return k11, k21
 
 # Read values from files
-with open(r'./thamso/a.txt', 'r') as f:
+with open(f'./thamso/a.txt', 'r') as f:
     a = int(f.read().strip())
-with open(r'./thamso/ya.txt', 'r') as f:
+with open(f'./thamso/y_a.txt', 'r') as f:
     ya = int(f.read().strip())
-with open(r'./thamso/p.txt', 'r') as f:
+with open(f'./thamso/P.txt', 'r') as f:
     p = int(f.read().strip())
-with open(r'./thamso/xb.txt', 'r') as f:
+with open(f'./thamso/x_b.txt', 'r') as f:
     xb = int(f.read().strip())
-with open(r'./c.r.s/s.txt', 'r') as f:
+with open(f'./c.r.s/s.txt', 'r') as f:
     s = int(f.read().strip())
 
 def fast_exponentiation(a, s, xb, p):
