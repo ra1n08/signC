@@ -117,7 +117,50 @@ class Param:
             with open(f"./thamso/IV.txt", "w") as f:
                 f.write(str(iv))
             print("Create Parameters succesfully!")
-                    
+    class Sparam():
+        def __init__(self) -> None:
+            pass    
+        
+        def hash_to_128(self, value):
+            sha256 = hashlib.sha256(value.encode())
+            hex_dig = sha256.hexdigest()
+            k1 = hex_dig[:32]
+            k2 = hex_dig[32:]
+            return k1, k2
+
+        def calculate_hash(self, x, yb, p):
+            value = modPrimePow(yb, x, p)
+            k1, k2 = self.hash_to_128(str(value))
+            return k1, k2
+        def encrypt_text(self, plaintext, key, iv):
+            backend = default_backend()
+            padder = PKCS7(algorithms.AES.block_size).padder()
+            padded_data = padder.update(plaintext.encode()) + padder.finalize()
+            cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=backend)
+            encryptor = cipher.encryptor()
+            ciphertext = encryptor.update(padded_data) + encryptor.finalize()
+            return base64.b64encode(ciphertext)
+        
+        def run(self, in_path):
+            with open(f"./thamso/giatriX.txt", "r") as f:
+                x = int(f.read().strip())
+
+            with open(f"./thamso/y_b.txt", "r") as f:
+                yb = int(f.read().strip())
+    
+            with open(f"./thamso/P.txt", "r") as f:
+                p = int(f.read().strip())
+
+            k1, k2 = self.calculate_hash(x, yb, p)
+
+            with open(r"./thamso/k1.txt", "w") as f:
+                f.write(k1)
+
+            with open(r"./thamso/k2.txt", "w") as f:
+                f.write(k2)
+
+            print("Tạo khóa k1 k2 thành công")
+                        
                 
             
             
