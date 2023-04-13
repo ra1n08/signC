@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import filedialog
 from c1pher import Param
 import threading
+import time
 
 class ToolTip:
     def __init__(self, widget, text):
@@ -73,8 +74,12 @@ class Application(tk.Frame):
         # Create the status bar
         self.status_bar = tk.Label(self.master, text="Ready")
         self.status_bar.pack(fill=tk.BOTH, expand=True, padx=50, pady=10)
+        
+        self.time_label = tk.Label(root, font=("Helvetica", 10))
+        self.time_label.pack(padx=10, pady=10)
 
     def cp(self):
+        self.start_time = time.time()
         self.cp_button.config(state="disabled")
         self.progress_bar.start(50)
         t = threading.Thread(target=self.cp_long)
@@ -89,11 +94,19 @@ class Application(tk.Frame):
         self.master.after(0, self.sign_button.config, {"state": "normal"})
         self.master.after(0, self.unsign_button.config, {"state": "normal"})
         self.master.after(0, self.status_bar.config, {"text": "Created Parameters!"})
+        self.master.after(0, self.time_label.config, {"text": f"{time.time() - self.start_time:.2f} seconds"})
       
 
     def sign(self):
-        # TODO: implement unsign function
-        pass
+        self.start_time = time.time()
+        self.cp_button.config(state="disabled")
+        self.progress_bar.start(50)
+        t = threading.Thread(target=self.sign_long)
+        t.start()
+        
+    def sign_long(self):
+        p = Param.Sparam()
+        p.run()
 
     def unsign(self):
         # TODO: implement create param function
