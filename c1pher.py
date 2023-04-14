@@ -251,6 +251,7 @@ class Param:
             c = modPrimePow(ya, xb, p)
             k = fast_exponentiation(a, s, xb, p)
             # Calculate encryption keys
+            
             k11, k21 = self.calculate_hash(k, c, p)
             with open(f"./thamso/k11.txt", "w") as f:
                 f.write(k11)
@@ -258,9 +259,45 @@ class Param:
             with open(f"./thamso/k21.txt", "w") as f:
                 f.write(k21)
             print('Tạo khóa k11 k21 thành công')
+            with open(f"./thamso/k11.txt", "rb") as f:
+                key = f.read()
+    
+            with open(f"./thamso/IV.txt", "rb") as f:
+                iv = f.read()
+   
+            with open(f"./c.r.s/c.txt", "r") as f:
+                ciphertext = f.read()
+                ciphertext = base64.b64decode(ciphertext)
 
+            self.decrypt_text_and_write_to_file(ciphertext, key, iv, "./outSign.txt")
+
+            print("Decryption succeeds")
             
-            pass
+            with open(f"./thamso/k21.txt", "r", encoding="utf-8") as file:
+                value = file.read().strip()
+                k21 = bytes.fromhex(value)
+
+            with open(f"./outSign.txt", "r", encoding="utf-8") as file:
+                plaintext = file.read().strip()
+
+            r1 = self.hash_function(k21, plaintext)
+
+            with open(f".\c.r.s\r1.txt", "w", encoding="utf-8") as file:
+                file.write(r1)
+
+            print('Tính chữ ký r1 thành công')
+
+            with open(f'./c.r.s/r.txt', 'r') as file:
+                r = file.readline().strip()
+
+            with open(f'./c.r.s/r1.txt', 'r') as file:
+                r1 = file.readline().strip()
+
+            if r1 == r:
+                print("Valid signature. Unsigncryption successful.")
+            else:
+                print("Invalid signature. Unsigncryption fails.")
+
 
 
                         

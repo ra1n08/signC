@@ -99,18 +99,33 @@ class Application(tk.Frame):
 
     def sign(self):
         self.start_time = time.time()
-        self.cp_button.config(state="disabled")
+        self.sign_button.config(state="disabled")
         self.progress_bar.start(50)
         t = threading.Thread(target=self.sign_long)
         t.start()
         
     def sign_long(self):
         p = Param.Sparam()
-        p.run()
+        p.run(self.open_sign_file)
+        self.master.after(0, self.sign_button.config, {"state": "normal"})
+        self.master.after(0, self.status_bar.config, {"text": "Signed!"})
+        self.master.after(0, self.time_label.config, {"text": f"{time.time() - self.start_time:.2f} seconds"})
+      
+
 
     def unsign(self):
-        # TODO: implement create param function
-        pass
+        self.start_time = time.time()
+        self.unsign_button.config(state="disabled")
+        self.progress_bar.start(50)
+        t = threading.Thread(target=self.unsign_long)
+        t.start()
+    def unsign_long(self):
+        p = Param.Uparam()
+        p.run(self.open_unsign_file)
+        self.master.after(0, self.unsign_button.config, {"state": "normal"})
+        self.master.after(0, self.status_bar.config, {"text": "Un-Signed!"})
+        self.master.after(0, self.time_label.config, {"text": f"{time.time() - self.start_time:.2f} seconds"})
+      
 
     def open_sign_file(self):
         filename = filedialog.askopenfilename(initialdir="/", title="Select file", filetypes=(("Text files", "*.txt"),))
