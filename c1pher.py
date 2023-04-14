@@ -114,8 +114,8 @@ class Param:
             print("sender keys is (x_b = {}; y_b = {})".format(xb, y_b))
             
             iv = secrets.token_bytes(16)
-            with open(f"./thamso/IV.txt", "w") as f:
-                f.write(str(iv))
+            with open(f"./thamso/IV.txt", "wb") as f:
+                f.write(iv)
             print("Create Parameters succesfully!")
     class Sparam():
         def __init__(self) -> None:
@@ -141,7 +141,10 @@ class Param:
             encryptor = cipher.encryptor()
             ciphertext = encryptor.update(padded_data) + encryptor.finalize()
             return base64.b64encode(ciphertext)
-        def hash_function(key, plaintext):
+
+
+        
+        def hash_function(self, key, plaintext):
             sha256 = hashlib.sha256()
             sha256.update(key + plaintext.encode('utf-8'))
             return sha256.hexdigest()

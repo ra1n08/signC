@@ -36,8 +36,8 @@ class Application(tk.Frame):
 
     def create_widgets(self):
         # Create the Sign button
-        self.cp_button = tk.Button(self.master, text="Create Parameters", command=self.cp)
-        self.cp_button.pack(fill=tk.BOTH, expand=True, padx=50, pady=10)
+        # self.cp_button = tk.Button(self.master, text="Create Parameters", command=self.cp)
+        # self.cp_button.pack(fill=tk.BOTH, expand=True, padx=50, pady=10)
 
 
         # Create the Unsign button
@@ -63,13 +63,8 @@ class Application(tk.Frame):
         self.progress_bar = tk.ttk.Progressbar(self.master, orient="horizontal", length=100, mode="indeterminate")
         self.progress_bar.pack(fill=tk.BOTH, expand=True, padx=50, pady=10)
         
-        self.sign_button.config(state="disabled")
-        ToolTip(self.sign_button, "Create Paramters first!")
-        self.unsign_button.config(state="disabled")
-        ToolTip(self.unsign_button, "Create Paramters first!")
-        self.sign_file_button.config(state="disabled")
-        self.unsign_file_button.config(state="disabled")
-
+        ToolTip(self.sign_button, "Start Signcryption!")
+        ToolTip(self.unsign_button, "Start unSigncryption!")
 
         # Create the status bar
         self.status_bar = tk.Label(self.master, text="Ready")
@@ -78,23 +73,6 @@ class Application(tk.Frame):
         self.time_label = tk.Label(root, font=("Helvetica", 10))
         self.time_label.pack(padx=10, pady=10)
 
-    def cp(self):
-        self.start_time = time.time()
-        self.cp_button.config(state="disabled")
-        self.progress_bar.start(50)
-        t = threading.Thread(target=self.cp_long)
-        t.start()
-        # t.join()
-        # self.master.after(0, self.check_thread, t)
-
-    def cp_long(self):
-        p = Param.Cparam(160)
-        p.run(160)
-        self.master.after(0, self.progress_bar.stop)
-        self.master.after(0, self.sign_button.config, {"state": "normal"})
-        self.master.after(0, self.unsign_button.config, {"state": "normal"})
-        self.master.after(0, self.status_bar.config, {"text": "Created Parameters!"})
-        self.master.after(0, self.time_label.config, {"text": f"{time.time() - self.start_time:.2f} seconds"})
       
 
     def sign(self):
@@ -106,7 +84,8 @@ class Application(tk.Frame):
         
     def sign_long(self):
         p = Param.Sparam()
-        p.run(self.open_sign_file)
+        p.run(self.open_sign_file())
+        self.master.after(0, self.progress_bar.stop)
         self.master.after(0, self.sign_button.config, {"state": "normal"})
         self.master.after(0, self.status_bar.config, {"text": "Signed!"})
         self.master.after(0, self.time_label.config, {"text": f"{time.time() - self.start_time:.2f} seconds"})
@@ -121,20 +100,20 @@ class Application(tk.Frame):
         t.start()
     def unsign_long(self):
         p = Param.Uparam()
-        p.run(self.open_unsign_file)
+        p.run(self.open_unsign_file())
         self.master.after(0, self.unsign_button.config, {"state": "normal"})
         self.master.after(0, self.status_bar.config, {"text": "Un-Signed!"})
         self.master.after(0, self.time_label.config, {"text": f"{time.time() - self.start_time:.2f} seconds"})
       
 
     def open_sign_file(self):
-        filename = filedialog.askopenfilename(initialdir="/", title="Select file", filetypes=(("Text files", "*.txt"),))
+        filename = filedialog.askopenfilename(initialdir=".", title="Select file", filetypes=(("Text files", "*.txt"),))
         self.sign_entry.delete(0, tk.END)
         self.sign_entry.insert(0, filename)
         return filename
 
     def open_unsign_file(self):
-        filename = filedialog.askopenfilename(initialdir="/", title="Select file", filetypes=(("Text files", "*.txt"),))
+        filename = filedialog.askopenfilename(initialdir=".", title="Select file", filetypes=(("Text files", "*.txt"),))
         self.unsign_entry.delete(0, tk.END)
         self.unsign_entry.insert(0, filename)
         return filename

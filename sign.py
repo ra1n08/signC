@@ -21,8 +21,8 @@ def calculate_hash(x, yb, p):
     k1, k2 = hash_to_128(str(value))
     return k1, k2
 
-x_file = r"./thamso/giatrix.txt"
-yb_file = r"./thamso/yb.txt"
+x_file = r"./thamso/giatriX.txt"
+yb_file = r"./thamso/y_b.txt"
 p_file = r"./thamso/P.txt"
 
 with open(x_file, "r") as f:
@@ -59,7 +59,7 @@ with open(".//thamso//k1.txt", "rb") as f:
 with open(r"./thamso/IV.txt", "rb") as f:
     iv = f.read()
 
-plaintext_file = ".//input//input.txt"
+plaintext_file = f"./example.txt"
 
 with open(plaintext_file, "r", encoding='UTF-8') as f:
     plaintext = f.read()
@@ -94,10 +94,10 @@ print('Tính chữ ký r thành công')
 P = r"./thamso/P.txt"
 with open(P, "r") as f:
      P = int(f.read().strip())  
-     x_file = r"./thamso/giatrix.txt"
+     x_file = r"./thamso/giatriX.txt"
 with open(x_file, "r") as f:
      x = int(f.read().strip())
-     x_a = r"./thamso/xa.txt"
+     x_a = r"./thamso/x_a.txt"
 with open(x_a, "r") as f:
      x_a = int(f.read().strip())
      s = (x - x_a + P ) % P
