@@ -240,7 +240,7 @@ class Param:
             with open(output_file, "wb") as f:
                 f.write(plaintext)
         
-        def run(self, in_path):
+        def run(self):
             with open(f'./thamso/a.txt', 'r') as f:
                 a = int(f.read().strip())
             with open(f'./thamso/y_a.txt', 'r') as f:
@@ -300,6 +300,10 @@ class Param:
                 print("Valid signature. Unsigncryption successful.")
             else:
                 print("Invalid signature. Unsigncryption fails.")
+                
+if __name__ == "__main__":
+    app = Param.Cparam(160)
+    app.run(160)
 
 
 

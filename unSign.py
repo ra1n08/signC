@@ -84,7 +84,7 @@ with open(".\\c.r.s\\c.txt", "r") as f:
     ciphertext = f.read()
     ciphertext = base64.b64decode(ciphertext)
 
-decrypt_text_and_write_to_file(ciphertext, key, iv, ".\\filegiai\\giaima.txt")
+decrypt_text_and_write_to_file(ciphertext, key, iv, ".\\outSign.txt")
 
 print("Decryption succeeds")
 
@@ -97,7 +97,7 @@ with open(".\\thamso\\k21.txt", "r", encoding="utf-8") as file:
     value = file.read().strip()
     k21 = bytes.fromhex(value)
 
-with open(".\\filegiai\\giaima.txt", "r", encoding="utf-8") as file:
+with open(".\\outSign.txt", "r", encoding="utf-8") as file:
     plaintext = file.read().strip()
 
 r1 = hash_function(k21, plaintext)
