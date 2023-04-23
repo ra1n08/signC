@@ -22,8 +22,7 @@ class Param:
         pass
     class Cparam:
         def __init__(self, bit) -> None:   
-            self.Qbit = bit
-            self.Q = generatePrime(self.Qbit)
+            self.Q = generatePrime(bit)
             self.R = random.getrandbits(20)
             self.P = self.calculateP(bit)
             self.percent = 0
@@ -41,7 +40,7 @@ class Param:
                     self.R = random.getrandbits(20)
         
                 
-        def run(self, bit):
+        def run(self):
             print("Q = ", self.Q)
             print("R = ", self.R)
             with open(f"./thamso/P.txt", "w") as f:
@@ -56,7 +55,8 @@ class Param:
                         f.write(f"({P}, {R})\n")
             print("PR keys created!")
             with open(f"./thamso/P_R.txt", "r") as f:
-                pairs = [ast.literal_eval(line.strip()) for line in f]
+                # pairs = [ast.literal_eval(line.strip()) for line in f]
+                pairs = [eval(line.strip()) for line in f]
                 
             valid_g = False
             while not valid_g:
@@ -77,7 +77,8 @@ class Param:
             with open(f"./thamso/a.txt", "w") as f:
                 f.write(str(a))
             with open(f"./thamso/P_R.txt", "r") as f:
-                pairs = [ast.literal_eval(line.strip()) for line in f]
+                # pairs = [ast.literal_eval(line.strip()) for line in f]
+                pairs = [eval(line.strip()) for line in f]
             valid_xa = False
             while not valid_xa:
                 P, R = random.choice(pairs)
@@ -95,7 +96,8 @@ class Param:
                 f.write(str(y_a))
             print("sender keys is (x_a = {}; y_a = {})".format(x_a, y_a))
             with open(f"./thamso/P_R.txt", "r") as f:
-                pairs = [ast.literal_eval(line.strip()) for line in f]
+                # pairs = [ast.literal_eval(line.strip()) for line in f]
+                pairs = [eval(line.strip()) for line in f]
                 
             valid_xb = False
             while not valid_xb :
@@ -301,9 +303,9 @@ class Param:
             else:
                 print("Invalid signature. Unsigncryption fails.")
                 
-if __name__ == "__main__":
-    app = Param.Cparam(160)
-    app.run(160)
+# if __name__ == "__main__":
+#     app = Param.Cparam(160)
+#     app.run(160)
 
 
 

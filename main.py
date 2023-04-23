@@ -33,19 +33,19 @@ class Application(tk.Frame):
         super().__init__(master)
         self.master = master
         self.file_path = ""
-        self.create_widgets()
+        self.sign_unsign_window()
 
-    def create_widgets(self):
+    def sign_unsign_window(self):
         # Create the Sign button
         # self.cp_button = tk.Button(self.master, text="Create Parameters", command=self.cp)
         # self.cp_button.pack(fill=tk.BOTH, expand=True, padx=50, pady=10)
         self.menuBar = Menu(self.master)
         self.master.config(menu=self.menuBar)
         self.menuMisc = Menu(self.menuBar, tearoff=0)
-        self.menuMisc.add_command(label="Parameters", command="#")
+        self.menuMisc.add_command(label="Parameters", command=self.create_paramm)
         self.menuMisc.add_command(label="in4", command="#")
         self.menuMisc.add_command(label="Help!", command="#")
-        self.menuBar.add_cascade(label="Misc", menu=self.menuMisc)
+        self.menuBar.add_cascade(label="More!", menu=self.menuMisc)
         # self.menuMisc.add_separator()
         
         
@@ -78,9 +78,22 @@ class Application(tk.Frame):
         self.time_label = tk.Label(root, font=("Helvetica", 10))
         self.time_label.pack(padx=10, pady=10)
         
+    def create_paramm(self):
+        self.window = tk.Toplevel(self.master)
+        self.window.geometry(f"{200}x{100}")
+        self.window.resizable(0,0)
+        self.cp_btn = tk.Button(self.window, text="Create Param", width=50, command=self.cp)
+        self.cp_btn.pack(expand=True, padx=50, pady=10)
+        self.bit_entry = tk.Entry(self.window)
+        self.bit_entry.pack(expand=True, padx=50, pady=5)
         
-
-      
+    def cp(self):
+        self.cp_btn.config(state="disabled")
+        self.progress_bar.start(50)
+        t = threading.Thread(target=self.cp_long)
+        t.start
+    def cp_long(self):
+        self.validation()
 
     def sign(self):
         self.master.after(0, self.time_label.config, {"text": ""})
@@ -127,9 +140,33 @@ class Application(tk.Frame):
         self.sign_entry.delete(0, tk.END)
         self.sign_entry.insert(0, filename)
         self.file_path = filename if filename else ""
+        
+    def validation(self):
+        name = self.bit.get()
+        msg = ''
+
+        if len(name) == 0:
+            msg = 'name can\'t be empty'
+        else:
+            try:
+                if any(ch.isdigit() for ch in name):
+                    msg = 'Name can\'t have numbers'
+                elif len(name) <= 2:
+                    msg = 'name is too short.'
+                elif len(name) > 100:
+                    msg = 'name is too long.'
+                else:
+                    msg = 'Success!'
+            except Exception as ep:
+                messagebox.showerror('error', ep)
+        
+        messagebox.showinfo('message', msg)
+    
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    root = tk.Tk(className="Chương trình mô phỏng lược đồ ký mã dựa trên Elgamal và Schnorr")
+    root.geometry(f"{600}x{300}")
+    root.resizable(0,0)
     app = Application(master=root)
     app.pack(fill=tk.BOTH, expand=True)
     app.mainloop()
