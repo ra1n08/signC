@@ -1,6 +1,12 @@
 import secrets
-from _math import is_prime
+from _math import is_prime, modPrimePow
 import ast
+from cryptography.hazmat.backends import default_backend
+# from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives.padding import PKCS7
+import hashlib
+import base64
 import random
 
 class ParamGenerater:
@@ -135,4 +141,21 @@ class ParamGenerater:
         with open(f"./thamso/iv.txt", "wb") as f:
             f.write(iv)
         print("generated parameters!")
+
+class Sign:
+    @staticmethod
+    def hash_to_128(value):
+        sha256 = hashlib.sha256(value.encode())
+        hex_dig = sha256.hexdigest()
+        k1 = hex_dig[:32]
+        k2 = hex_dig[32:]
+        return k1, k2
+    
+    @staticmethod calculate_hash(x, yb, p):
+    value = modPrimePow(yb, x, p)
+    k1, k2 = hash_to_128(str(value))
+    return k1, k2
+
+    def run(self, inpF):
+        pass
         
