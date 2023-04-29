@@ -224,7 +224,7 @@ class Sign:
         r = Sign.hash_function(k2, plaintext)
         
         # write r signature to file
-        with open(f"{outP}r.txt", "w", encoding="UTF-8") as f:
+        with open(f"{outP}/r.txt", "w", encoding="UTF-8") as f:
             f.write(r)
             
         print("generated r signature!")
