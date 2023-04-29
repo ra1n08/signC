@@ -76,7 +76,7 @@ class ParamGenerater:
         
         x = g
         with open(f"./thamso/giatriX.txt", "w") as f:
-            f.write(f"{x}\n")
+            f.write(f"{int(x)}\n")
         print("X=", x)
         print("X saved successfully!")
         
@@ -129,7 +129,7 @@ class ParamGenerater:
         
         with open(f"./thamso/Xb.txt", "w") as f:
             f.write(f"{xb}\n")
-        with open(f"./thamso/Xh.txt", "w") as f:
+        with open(f"./thamso/Xb.txt", "w") as f:
             f.write(str(xb))
         
         y_b = pow(a, xb ,p)
@@ -140,7 +140,7 @@ class ParamGenerater:
         iv = secrets.token_bytes(16)
         with open(f"./thamso/iv.txt", "wb") as f:
             f.write(iv)
-        print("generated parameters!")
+        print("\x1b[32mgenerated parameters! \n")
 
 class Sign:
     @staticmethod
@@ -151,11 +151,118 @@ class Sign:
         k2 = hex_dig[32:]
         return k1, k2
     
-    @staticmethod calculate_hash(x, yb, p):
-    value = modPrimePow(yb, x, p)
-    k1, k2 = hash_to_128(str(value))
-    return k1, k2
+    @staticmethod 
+    def calculate_hash(x, yb, p):
+        value = modPrimePow(yb, x, p)
+        k1, k2 = Sign.hash_to_128(str(value))
+        return k1, k2
+    
+    @staticmethod
+    def encrypt_text(plaintext, key, iv):
+        backend = default_backend()
+        padder = PKCS7(algorithms.AES.block_size).padder()
+        padded_data = padder.update(plaintext.encode()) + padder.finalize()
+        cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=backend)
+        encryptor = cipher.encryptor()
+        ciphertext = encryptor.update(padded_data) + encryptor.finalize()
+        return base64.b64encode(ciphertext)
+    
+    @staticmethod
+    def hash_function(key, plaintext):
+        sha256 = hashlib.sha256()
+        sha256.update(key + plaintext.encode("UTF-8"))
+        return sha256.hexdigest()
+        
 
-    def run(self, inpF):
-        pass
+    def run(self, inpF, outP):
+        with open(f"./thamso/giatriX.txt", "r") as f:
+            x = int(f.read().strip())
+        with open(f"./thamso/Yb.txt", "r") as f:
+            yb = int(f.read().strip())
+        with open(f"./thamso/P.txt", "r") as f:
+            p = int(f.read().strip())
+        
+        # calculate keys
+        k1, k2 = Sign.calculate_hash(x, yb, p)
+        
+        # write keys to files
+        with open(f"./thamso/k1.txt", "w") as f:
+            f.write(k1)
+        with open(f"./thamso/k2.txt", "w") as f:
+            f.write(k2)
+            
+        print("created keys!")
+        
+        # init key 1 from file
+        with open(f"./thamso/k1.txt", "rb") as f:
+            key = f.read()
+        # init IV token from file
+        with open(f"./thamso/iv.txt", "rb") as f:
+            iv = f.read()
+        
+        # read plaintext file and SignCrypt it
+        plaintext = inpF
+        with open(plaintext, "r", encoding="UTF-8") as f: # text file encode type UTF-8
+            plaintext = f.read()
+        ciphertext = Sign.encrypt_text(plaintext, key, iv)
+        
+        # write Signed text to file
+        with open(f"{outP}/c.txt", "wb") as f: # write with binary mode
+            f.write(ciphertext)
+        print("SignCrypted!")
+        
+        # init key 2 from file
+        with open(f"./thamso/k2.txt", "r", encoding="UTF-8") as f:
+            value = f.read().strip()
+            k2= bytes.fromhex(value)
+        
+        # read text from file
+        # with open(inpF, "r", encoding="UTF-8") as f:
+        #     plaintext = f.read().strip()
+        
+        # calculate r signature    
+        r = Sign.hash_function(k2, plaintext)
+        
+        # write r signature to file
+        with open(f"{outP}r.txt", "w", encoding="UTF-8") as f:
+            f.write(r)
+            
+        print("generated r signature!")
+        
+        # init P from file
+        with open(f"./thamso/P.txt", "r") as f:
+            P = int(f.read().strip())
+        # init X from file (now X inited)
+        # with open(f"./thamso/giatriX.txt", "r") as f:
+        #     x = int(f.read().strip())
+        with open(f"./thamso/Xa.txt", "r") as f:
+            x_a = int(f.read().strip())
+        # calculate s signature
+        s = (x - x_a + P) % P
+        
+        # write s signature to file
+        with open(f"{outP}/s.txt", "w") as f:
+            f.write(str(s))
+        
+        print("Generated s signature!")
+        print("SignCryption successful!")
+        
+        
+        
+         
+        
+            
+        
+        
+            
+        
+        
+        
+
+            
+              
+        
+        
+        
+        
         
