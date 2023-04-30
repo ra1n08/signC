@@ -310,7 +310,7 @@ class unSign:
             ciphertext = base64.b64decode(ciphertext)
         # decrypt plaintext file
         plaintext_decrypted = unSign.decrypt_text(ciphertext, key, iv, f"{outF}/unSigned.txt")
-        print("\x1b[32m -----Decrypted----- \n")
+        print("\x1b[32m-------Decrypted--------")
         
         with open(f"./thamso/k21.txt", "r", encoding="UTF-8") as f:
             value = f.read().strip()
@@ -334,13 +334,13 @@ class unSign:
         else:
             print("\x1b[31mInvalid signature! UnSignCryption failed!")
             
-# if __name__ == "__main__":
-#     cp = ParamGenerater()
-#     sign = Sign()
-#     unsign = unSign()
-#     cp.run(160)
-#     sign.run(f"/workspace/signC/example_text.txt", f"./c.r.s/")
-#     unsign.run(f"./c.r.s/", f".")
+if __name__ == "__main__":
+    cp = ParamGenerater()
+    sign = Sign()
+    unsign = unSign()
+    cp.run(160)
+    sign.run(f"/workspace/signC/example_text.txt", f"./c.r.s/")
+    unsign.run(f"./c.r.s/", f".")
         
         
         
