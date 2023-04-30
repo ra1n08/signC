@@ -1,5 +1,5 @@
 import secrets
-from _math import is_prime, modPrimePow
+from _math import is_prime, modPrimePow, fast_exponentiation
 import ast
 from cryptography.hazmat.backends import default_backend
 # from cryptography.hazmat.primitives import hashes
@@ -245,7 +245,106 @@ class Sign:
             f.write(str(s))
         
         print("Generated s signature!")
-        print("SignCryption successful!")
+        print("---------Signed---------")
+        
+class unSign:
+    @staticmethod
+    def hash_to_128(value):
+        sha256 = hashlib.sha256(value.encode())
+        hex_dig = sha256.hexdigest()
+        k11 = hex_dig[:32]
+        k21 = hex_dig[32:]
+        return k11, k21
+    @staticmethod
+    def calculate_hash(k, c, p):
+        value = (k * c) % p
+        k11 ,k21 = unSign.hash_to_128(str(value))
+        return k11, k21
+    @staticmethod
+    def decrypt_text(ciphertext, key, iv, out=str):
+        backend = default_backend()
+        cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=backend)
+        decryptor = cipher.decryptor()
+        padded_plaintext = decryptor.update(ciphertext) + decryptor.finalize()
+        unpadder = PKCS7(algorithms.AES.block_size).unpadder()
+        plaintext = unpadder.update(padded_plaintext) + unpadder.finalize()
+        
+        with open(out, "wb") as f:
+            f.write(plaintext)
+    @staticmethod
+    def hash_function(key, plaintext):
+        sha256 = hashlib.sha256()
+        sha256.update(key + plaintext.encode("UTF-8"))
+        return sha256.hexdigest()
+    
+    def run(self, inF, outF):
+        # init varibles and keys from file
+        with open(f"./thamso/a.txt", "r") as f:
+            a = int(f.read().strip())
+        with open(f"./thamso/Ya.txt", "r") as f:
+            y_a = int(f.read().strip())
+        with open(f"./thamso/P.txt", "r") as f:
+            p = int(f.read().strip())
+        with open(f"./thamso/Xb.txt", "r") as f:
+            xb = int(f.read().strip())
+        with open(f"{inF}/s.txt", "r") as f:
+            s = int(f.read().strip())
+            
+        c = modPrimePow(y_a, xb, p)
+        k = fast_exponentiation(a, s, xb, p)
+        
+        # calculate encryption keys
+        k11, k21 = unSign.calculate_hash(k, c, p)
+        with open(f"./thamso/k11.txt", "w") as f:
+            f.write(k11)
+        with open(f"./thamso/k21.txt", "w") as f:
+            f.write(k21)
+        print("Generated key 11 and key 21!")
+        
+        with open(f"./thamso/k11.txt", "rb") as f:
+            key = f.read()
+        with open(f"./thamso/iv.txt", "rb") as f:
+            iv = f.read()
+        with open(f"{inF}/c.txt", "r") as f:
+            ciphertext = f.read()
+            ciphertext = base64.b64decode(ciphertext)
+        # decrypt plaintext file
+        plaintext_decrypted = unSign.decrypt_text(ciphertext, key, iv, f"{outF}/unSigned.txt")
+        print("\x1b[32m -----Decrypted----- \n")
+        
+        with open(f"./thamso/k21.txt", "r", encoding="UTF-8") as f:
+            value = f.read().strip()
+            k21 = bytes.fromhex(value)
+        with open(f"{outF}/unSigned.txt", "r", encoding="UTF-8") as f:
+            plaintext = f.read().strip()
+            
+        r1 = unSign.hash_function(k21, plaintext)
+        
+        with open(f"{outF}/r1.txt", "w", encoding="UTF-8") as f:
+            f.write(r1)
+        print("Calculated r1 signature!")
+        
+        with open(f"{inF}/r.txt", "r") as f:
+            r = f.readline().strip()
+        with open(f"{outF}/r1.txt", "r") as f:
+            r1 = f.readline().strip()
+        
+        if r1 == r:
+            print("\x1b[32mValid signature! UnSignCryption successful!")
+        else:
+            print("\x1b[31mInvalid signature! UnSignCryption failed!")
+            
+# if __name__ == "__main__":
+#     cp = ParamGenerater()
+#     sign = Sign()
+#     unsign = unSign()
+#     cp.run(160)
+#     sign.run(f"/workspace/signC/example_text.txt", f"./c.r.s/")
+#     unsign.run(f"./c.r.s/", f".")
+        
+        
+        
+            
         
         
         

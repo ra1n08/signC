@@ -3,7 +3,7 @@
 # except:
 #     os.system(f"python3 -m pip install -r requirements.txt")
 
-from cypherV2_fixed import ParamGenerater, Sign
+from cypherV2_fixed import ParamGenerater, Sign, unSign
 import time
 import sys
 
@@ -22,10 +22,11 @@ banner = f"""
 
 cp = ParamGenerater()
 sign = Sign()
+unsign =unSign()
     
 if __name__ == "__main__":
     print(banner)
-    parser = argparse.ArgumentParser(description="idk write what in here :)))")
+    parser = argparse.ArgumentParser(description="idk write what in here :))))")
     # parser.add_argument("mode", choices=["cp", "sign", "unsign"], help="cp is Create Param, for generate parameters, \n sign for start SignCrypt, \n unsign for start Un-SignCrypt (DeCrypt)")
     commands = parser.add_subparsers(dest="command")
     # tạo group cho lệnh tạo tham số
@@ -37,12 +38,12 @@ if __name__ == "__main__":
     sign_parser.add_argument('-i', '--input', dest="sign_in", type=str, help="input file for sign")
     sign_parser.add_argument('-o', '--output', dest="sign_out", type=str, help="output PATH for signed file and r,s signature (default: ./c.r.s/)", default="./c.r.s")
 
-    # # tạo group cho lệnh unSign
-    # unsign_parser = parser.add_argument_group("unsign")
-    # unsign_parser.add_argument('-i', '--input', dest="unsign_in", type=str, help="input FILE for unSignCryption")
-    # unsign_parser.add_argument('-o', '--output', dest="unsign_out", type=str, help="output PATH for unSignCryption")
-    args = parser.parse_args()
+    # tạo group cho lệnh unSign
+    unsign_parser = commands.add_parser("unsign", help="unSigncrypt Signed file")
+    unsign_parser.add_argument('-i', '--input', dest="unsign_in", type=str, help="input FILE for unSignCryption", default="./c.r.s")
+    unsign_parser.add_argument('-o', '--output', dest="unsign_out", type=str, help="output PATH for unSignCryption")
     
+    args = parser.parse_args()
     print(args)
     if args.command == "cp":
         print("now at generate parameter mode!")
@@ -52,6 +53,6 @@ if __name__ == "__main__":
         sign.run(args.sign_in, args.sign_out)
     if args.command == "unsign":
         print("now at unSign mode!")
-        # unsign.run()
-        print(args.unsign_in, args.unsign_out) # call duoc khong alo
+        unsign.run(args.unsign_in, args.unsign_out)
+        # print(args.unsign_in, args.unsign_out)
 

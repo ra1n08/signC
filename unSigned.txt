@@ -1,0 +1,6 @@
+This is example plaintext file
+THIS IS EXAMPLE PLAINTEXT FILE
+đây là file text ví dụ
+ĐÂY LÀ FILE TEXT VÍ DỤ
+1234567890
+!@#$%^&*()\/
